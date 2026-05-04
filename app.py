@@ -1,16 +1,14 @@
 import streamlit as st
-import pickle
-import sys
+import joblib
 
 # Load detector
 @st.cache_resource
 def load_detector():
     try:
-        with open('fake_review_detector_v3.pkl', 'rb') as f:
-            detector = pickle.load(f)
+        detector = joblib.load("fake_review_detector_v3.pkl")
         return detector
-    except:
-        st.error("Error: fake_review_detector_v3.pkl not found!")
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
         st.stop()
 
 detector = load_detector()
@@ -45,7 +43,6 @@ if st.button("🔍 Analyze", use_container_width=True):
     else:
         result = detector.detect_fake(review)
         
-        # Result
         st.markdown("---")
         
         if result['is_fake']:
@@ -53,7 +50,6 @@ if st.button("🔍 Analyze", use_container_width=True):
         else:
             st.success(f"✅ LIKELY GENUINE REVIEW ({100-result['confidence']:.1f}% confidence)")
         
-        # Reasons
         st.markdown("**Why:**")
         if result['reasons']:
             for reason in result['reasons']:
@@ -61,7 +57,6 @@ if st.button("🔍 Analyze", use_container_width=True):
         else:
             st.write("• No obvious red flags detected")
         
-        # Details
         with st.expander("📊 Detailed Analysis"):
             col1, col2 = st.columns(2)
             
