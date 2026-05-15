@@ -13,49 +13,6 @@ st.set_page_config(
     layout="wide"
 )
 
-st.markdown("""
-<style>
-.main {
-    padding: 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-h1 {
-    color: white;
-    text-align: center;
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.subtitle {
-    text-align: center;
-    color: #f0f0f0;
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-}
-
-.genuine-badge {
-    background: #2ecc71;
-    color: white;
-    padding: 1rem;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-.fake-badge {
-    background: #e74c3c;
-    color: white;
-    padding: 1rem;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-</style>
-""", unsafe_allow_html=True)
-
 @st.cache_resource
 def load_models():
 
