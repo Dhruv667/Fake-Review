@@ -6,8 +6,8 @@ import nltk
 
 nltk.download('stopwords')
 
-model = joblib.load('fake_review_model_final.pkl')
-tfidf = joblib.load('tfidf_final.pkl')
+model = joblib.load('fake_review_yelp_final.pkl')
+tfidf = joblib.load('tfidf_yelp_final.pkl')
 
 stop_words = set(stopwords.words('english'))
 
