@@ -1,8 +1,8 @@
 streamlit==1.28.1
 pandas==2.0.3
-numpy==1.26.4
+numpy==1.24.3
 scikit-learn==1.3.0
 tensorflow==2.13.0
 keras==2.13.1
-joblib
-h5py
+joblib==1.3.2
+h5py==3.9.0
