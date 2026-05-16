@@ -1,7 +1,4 @@
 streamlit
-nltk
-joblib
 scikit-learn
-imbalanced-learn
-numpy
-pandas
+joblib
+nltk
