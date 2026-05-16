@@ -21,17 +21,16 @@ def clean_text(text):
 st.title("🛡️ Fake Review Detector")
 st.subheader("Enter a product review:")
 
-# Initialize session state for the text area
+# Initialize session state
 if 'review_text' not in st.session_state:
     st.session_state.review_text = ""
+if 'result' not in st.session_state:
+    st.session_state.result = None
 
-# Create two columns for buttons
-col1, col2 = st.columns([0.8, 0.2])
+# Create columns for buttons
+col1, col2 = st.columns(2)
 
 review = st.text_area("Review", height=150, value=st.session_state.review_text, key='review_input')
-
-# Button layout
-col1, col2 = st.columns(2)
 
 with col1:
     if st.button("Check Review", use_container_width=True):
@@ -44,11 +43,18 @@ with col1:
             confidence = model.predict_proba(vector)[0]
             
             if prediction == 0:
-                st.error(f"❌ DECEPTIVE Review — Confidence: {confidence[0]*100:.1f}%")
+                st.session_state.result = f"❌ DECEPTIVE Review — Confidence: {confidence[0]*100:.1f}%"
             else:
-                st.success(f"✅ GENUINE Review — Confidence: {confidence[1]*100:.1f}%")
+                st.session_state.result = f"✅ GENUINE Review — Confidence: {confidence[1]*100:.1f}%"
 
 with col2:
     if st.button("Clear", use_container_width=True):
         st.session_state.review_text = ""
         st.rerun()
+
+# Display result separately (won't be cleared)
+if st.session_state.result:
+    if "DECEPTIVE" in st.session_state.result:
+        st.error(st.session_state.result)
+    else:
+        st.success(st.session_state.result)
