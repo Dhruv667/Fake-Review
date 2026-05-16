@@ -1,115 +1,54 @@
 import streamlit as st
 import joblib
-import warnings
+import re
+from nltk.corpus import stopwords
+import nltk
 
-warnings.filterwarnings("ignore")
+nltk.download('stopwords')
 
-st.set_page_config(
-    page_title="Fake Review Detector",
-    page_icon="🔍",
-    layout="wide"
-)
+model = joblib.load('fake_review_model.pkl')
+tfidf = joblib.load('tfidf_vectorizer.pkl')
 
-@st.cache_resource
-def load_models():
-    nb_model = joblib.load("models/naive_bayes_model.pkl")
-    lr_model = joblib.load("models/logistic_regression_model.pkl")
-    vectorizer = joblib.load("models/tfidf_vectorizer.pkl")
-    model_info = joblib.load("models/model_info.pkl")
+stop_words = set(stopwords.words('english'))
 
-    return nb_model, lr_model, vectorizer, model_info
+def clean_text(text):
+    text = str(text).lower()
+    text = re.sub(r'[^a-z\s]', '', text)
+    words = text.split()
+    words = [w for w in words if w not in stop_words and len(w) > 2]
+    return ' '.join(words)
 
-try:
-    nb_model, lr_model, vectorizer, model_info = load_models()
-except Exception as e:
-    st.error(f"Error loading models: {e}")
-    st.stop()
+st.title("🛡️ Fake Review Detector")
+st.subheader("Enter a product review:")
 
-st.title("🔍 Fake Review Detection System")
-st.subheader("Amazon Fake Review Detection using Machine Learning")
+# Initialize session state for the text area
+if 'review_text' not in st.session_state:
+    st.session_state.review_text = ""
 
-st.markdown("---")
+# Create two columns for buttons
+col1, col2 = st.columns([0.8, 0.2])
 
-sample_reviews = {
-    "Fake Review": "BEST PRODUCT EVER!!! AMAZING QUALITY!!! MUST BUY RIGHT NOW!!!",
-    "Genuine Review": "The product quality is decent for the price. Delivery was fast and packaging was good."
-}
+review = st.text_area("Review", height=150, value=st.session_state.review_text, key='review_input')
 
-if "review_input" not in st.session_state:
-    st.session_state.review_input = ""
-
+# Button layout
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button("📌 Fake Sample", use_container_width=True):
-        st.session_state.review_input = sample_reviews["Fake Review"]
+    if st.button("Check Review", use_container_width=True):
+        if review.strip() == "":
+            st.warning("Please enter a review!")
+        else:
+            cleaned = clean_text(review)
+            vector = tfidf.transform([cleaned])
+            prediction = model.predict(vector)[0]
+            confidence = model.predict_proba(vector)[0]
+            
+            if prediction == 0:
+                st.error(f"❌ DECEPTIVE Review — Confidence: {confidence[0]*100:.1f}%")
+            else:
+                st.success(f"✅ GENUINE Review — Confidence: {confidence[1]*100:.1f}%")
 
 with col2:
-    if st.button("📌 Genuine Sample", use_container_width=True):
-        st.session_state.review_input = sample_reviews["Genuine Review"]
-
-review_input = st.text_area(
-    "📝 Enter Review",
-    value=st.session_state.review_input,
-    height=200,
-    placeholder="Paste your review here..."
-)
-
-st.markdown("---")
-
-if st.button("🔍 Analyze Review", use_container_width=True):
-
-    if review_input.strip() == "":
-        st.warning("Please enter a review")
-
-    else:
-
-        X_input = vectorizer.transform([review_input])
-
-        nb_pred = nb_model.predict(X_input)[0]
-        nb_prob = nb_model.predict_proba(X_input)[0]
-        nb_conf = max(nb_prob) * 100
-
-        lr_pred = lr_model.predict(X_input)[0]
-        lr_prob = lr_model.predict_proba(X_input)[0]
-        lr_conf = max(lr_prob) * 100
-
-        st.markdown("## 📊 Results")
-
-        tabs = st.tabs([
-            "🤖 Naive Bayes",
-            "📈 Logistic Regression",
-            "🎯 Final Result"
-        ])
-
-        with tabs[0]:
-
-            if nb_pred == 1:
-                st.success(f"GENUINE REVIEW\n\nConfidence: {nb_conf:.2f}%")
-            else:
-                st.error(f"FAKE REVIEW\n\nConfidence: {nb_conf:.2f}%")
-
-        with tabs[1]:
-
-            if lr_pred == 1:
-                st.success(f"GENUINE REVIEW\n\nConfidence: {lr_conf:.2f}%")
-            else:
-                st.error(f"FAKE REVIEW\n\nConfidence: {lr_conf:.2f}%")
-
-        with tabs[2]:
-
-            predictions = [nb_pred, lr_pred]
-
-            final_pred = 1 if sum(predictions) >= 1 else 0
-
-            if final_pred == 1:
-                st.success("✅ FINAL RESULT: GENUINE REVIEW")
-            else:
-                st.error("❌ FINAL RESULT: FAKE REVIEW")
-
-st.markdown("---")
-
-st.markdown(
-    "<div style='text-align:center;'>Fake Review Detection System using Machine Learning</div>",
-    unsafe_allow_html=True
-)
+    if st.button("Clear", use_container_width=True):
+        st.session_state.review_text = ""
+        st.rerun()
