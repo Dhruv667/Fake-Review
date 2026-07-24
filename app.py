@@ -11,7 +11,7 @@ st.set_page_config(page_title="Review Authenticity Checker", layout="centered", 
 
 st.markdown("""
     <div style='text-align: center; padding: 20px 0; margin-bottom: 30px;'>
-        <h1 style='font-size: 2.5em; color: #3b82f6; margin: 0;'>🛡️ Fake Review Detector</h1>
+        <h1 style='font-size: 2.5em; color: #3b82f6; margin: 0;'>🛡️ Fake Authenticity Checker</h1>
         <p style='color: #94a3b8; font-size: 1em; margin: 10px 0 0 0;'>Detect fake reviews with machine learning</p>
     </div>
 """, unsafe_allow_html=True)
