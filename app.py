@@ -132,7 +132,6 @@ if check:
     else:
         st.success(
             "✅ **This review appears to be GENUINE.**\n\n"
-            "The trained machine learning model detected characteristics commonly found in authentic reviews."
         )
 
 st.markdown("---")
