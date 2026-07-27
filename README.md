@@ -132,8 +132,8 @@ The model was trained on an e-commerce product review dataset containing both ge
 
 **Dhruv Bhoir**
 
-GitHub: https://github.com/dhruv-bhoir-ai
-
+- GitHub: https://github.com/dhruv-bhoir-ai
+- LinkedIn: https://www.linkedin.com/in/dhruv-bhoir-ai
 ---
 
 ## ⭐ Support
