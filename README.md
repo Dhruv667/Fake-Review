@@ -5,8 +5,7 @@
 ![Scikit-learn](https://img.shields.io/badge/Scikit--learn-ML-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-A Machine Learning-based web application that detects whether a product review is **Genuine** or **Fake** using Natural Language Processing (NLP) and TF-IDF vectorization. The application provides an intuitive Streamlit interface for real-time review analysis.
-
+A Machine Learning-based web application that detects whether a product review is Genuine or Fake using Natural Language Processing (NLP), TF-IDF vectorization, and an MLP Neural Network classifier. The application provides an intuitive Streamlit interface for real-time review analysis.
 ---
 
 ## 🌐 Live Demo
