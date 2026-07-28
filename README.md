@@ -114,7 +114,7 @@ streamlit run app.py
 
 ## 📊 Dataset
 
-The model was trained on an e-commerce product review dataset containing both genuine and fake reviews. Reviews were preprocessed using NLP techniques and transformed using TF-IDF vectorization before training the machine learning model.
+The model was trained on the Fake Reviews Dataset from Kaggle, containing ~40,000 labeled reviews — balanced between Fake (CG) and Genuine (OR) categories. The review text was preprocessed through null/duplicate removal, lowercasing, punctuation removal, stopword removal, tokenization, and TF-IDF vectorization before being used to train the classification model.
 
 ---
 
