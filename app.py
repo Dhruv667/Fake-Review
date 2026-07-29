@@ -30,15 +30,14 @@ st.divider()
 with st.sidebar:
     st.title("About")
     st.write("""
-This application uses a trained Machine Learning model
-to classify product reviews as **Fake** or **Genuine**.
+This application uses a machine learning-based classification engine to detect whether a product review is **Fake** or **Genuine**.
 
 ### Tech Stack
 - Python
 - Streamlit
 - Scikit-learn
-- TF-IDF
-- Joblib
+- TF-IDF Vectorization
+- MLP Neural Network
 """)
 
 st.subheader("Enter Review")
